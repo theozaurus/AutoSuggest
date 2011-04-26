@@ -65,12 +65,13 @@
 		}
 		if((d_type == "object" && d_count > 0) || d_type == "string"){
 			return this.each(function(x){
+			  var x_id;
 				if(!opts.asHtmlID){
 					x = x+""+Math.floor(Math.random()*100); //this ensures there will be unique IDs on the page if autoSuggest() is called multiple times
-					var x_id = "as-input-"+x;
+					x_id = "as-input-"+x;
 				} else {
 					x = opts.asHtmlID;
-					var x_id = x;
+					x_id = x;
 				}
 				opts.start.call(this);
 				var input = $(this);
@@ -102,12 +103,12 @@
 					  if (opts.preFill.hasOwnProperty(k)){ prefill_count++; }
 					}
 					if(prefill_count > 0){
-						for(var i=0; i < prefill_count; i++){
-							var new_v = opts.preFill[i][opts.selectedValuesProp];
+						for(var ii=0; ii < prefill_count; ii++){
+							var new_v = opts.preFill[ii][opts.selectedValuesProp];
 							if(new_v === undefined){ new_v = ""; }
 							prefill_value = prefill_value+new_v+",";
 							if(new_v !== ""){
-								add_selected_item(opts.preFill[i], "000"+i);	
+								add_selected_item(opts.preFill[ii], "000"+ii);	
 							}		
 						}
 					}
@@ -257,19 +258,20 @@
 						results_holder.hide();
 					}
 				}
-				var num_count = 0;
 				function processData(data, query){
+				  var num_count = 0;
 					if (!opts.matchCase){ query = query.toLowerCase(); }
 					var matchCount = 0;
 					results_holder.html(results_ul.html("")).hide();
-					for(var i=0;i<d_count;i++){				
+					for(var i=0;i<d_count;i++){
+					  var str;
 						var num = i;
 						num_count++;
 						var forward = false;
 						if(opts.searchObjProps == "value") {
-							var str = data[num].value;
+							str = data[num].value;
 						} else {	
-							var str = "";
+							str = "";
 							var names = opts.searchObjProps.split(",");
 							for(var y=0;y<names.length;y++){
 								var name = $.trim(names[y]);
@@ -300,10 +302,11 @@
 									$(this).addClass("active");
 								}).data("data",{attributes: data[num], num: num_count});
 							var this_data = $.extend({},data[num]);
+							var regx;
 							if (!opts.matchCase){ 
-								var regx = new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + query + ")(?![^<>]*>)(?![^&;]+;)", "gi");
+								regx = new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + query + ")(?![^<>]*>)(?![^&;]+;)", "gi");
 							} else {
-								var regx = new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + query + ")(?![^<>]*>)(?![^&;]+;)", "g");
+								regx = new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + query + ")(?![^<>]*>)(?![^&;]+;)", "g");
 							}
 							
 							if(opts.resultsHighlight){
@@ -350,10 +353,11 @@
 				function moveSelection(direction){
 					if($(":visible",results_holder).length > 0){
 						var lis = $("li", results_holder);
+						var start;
 						if(direction == "down"){
-							var start = lis.eq(0);
+							start = lis.eq(0);
 						} else {
-							var start = lis.filter(":last");
+							start = lis.filter(":last");
 						}					
 						var active = $("li.active:first", results_holder);
 						if(active.length > 0){
