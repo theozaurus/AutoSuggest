@@ -66,6 +66,33 @@
 		if((d_type == "object" && d_count > 0) || d_type == "string"){
 			return this.each(function(x){
 			  
+			  // Returns array of values currently selected
+				function values() {
+				  var string = values_input.val().trim();
+				  if( string === "" ){
+				    return [];
+				  } else {
+				    return string.split(',');
+				  }
+				}
+				
+				// Returns true or false if values array includes item
+				function values_includes(item) {
+				  return jQuery.inArray(values(),item) != -1;
+				}
+				
+				// Removes an item from the values field
+				function values_remove(item) {
+				  values_input.val(
+				    jQuery.grep( values(), function(element,index){ return element != item; } ).join(',')
+				  );
+				}
+
+				// Adds an item to the values field
+				function values_add(item) {
+				  values_input.val(values().concat(item).join(','));
+				}
+			  
 			  function keyChange() {
 					// ignore if the following keys are pressed: [del] [shift] [capslock]
 					if( lastKeyPressCode == 46 || (lastKeyPressCode > 8 && lastKeyPressCode < 32) ){ return results_holder.hide(); }
@@ -124,7 +151,7 @@
 						}
 						if(str){
 							if (!opts.matchCase){ str = str.toLowerCase(); }				
-							if(str.search(query) != -1 && values_input.val().search(","+data[num][opts.selectedValuesProp]+",") == -1){
+							if(str.search(query) != -1 && !values_includes(data[num][opts.selectedValuesProp])){
 								forward = true;
 							}	
 						}
@@ -177,14 +204,14 @@
 				}
 				
 				function add_selected_item(data, num){
-					values_input.val(values_input.val()+data[opts.selectedValuesProp]+",");
+					values_add(data[opts.selectedValuesProp]);
 					var item = $('<li class="as-selection-item" id="as-selection-'+num+'"></li>').click(function(){
 							opts.selectionClick.call(this, $(this));
 							selections_holder.children().removeClass("selected");
 							$(this).addClass("selected");
 						}).mousedown(function(){ input_focus = false; });
 					var close = $('<a class="as-close">&times;</a>').click(function(){
-							values_input.val(values_input.val().replace(","+data[opts.selectedValuesProp]+",",","));
+							values_remove(data[opts.selectedValuesProp]);
 							opts.selectionRemoved.call(this, item);
 							input_focus = true;
 							input.focus();
@@ -267,8 +294,7 @@
 				if(prefill_value !== ""){
 					input.val("");
 					var lastChar = prefill_value.substring(prefill_value.length-1);
-					if(lastChar != ","){ prefill_value = prefill_value+","; }
-					values_input.val(","+prefill_value);
+					values_add(prefill_value);
 					$("li.as-selection-item", selections_holder).addClass("blur").removeClass("selected");
 				}
 				input.after(values_input);
@@ -317,11 +343,11 @@
 							break;
 						case 8:  // delete
 							if(input.val() === ""){
-								var last = values_input.val().split(",");
-								last = last[last.length - 2];
+								var last = values();
+								last = last[last.length - 1];
 								selections_holder.children().not(org_li.prev()).removeClass("selected");
 								if(org_li.prev().hasClass("selected")){
-									values_input.val(values_input.val().replace(","+last+",",","));
+									values_remove(last);
 									opts.selectionRemoved.call(this, org_li.prev());
 								} else {
 									opts.selectionClick.call(this, org_li.prev());
@@ -340,7 +366,7 @@
 						case 9: case 188:  // tab or comma
 							tab_press = true;
 							var i_input = input.val().replace(/(,)/g, "");
-							if(i_input !== "" && values_input.val().search(","+i_input+",") < 0 && i_input.length >= opts.minChars){	
+							if(i_input !== "" && !values_includes(i_input) && i_input.length >= opts.minChars){	
 								e.preventDefault();
 								var n_data = {};
 								n_data[opts.selectedItemProp] = i_input;
