@@ -59,7 +59,9 @@
 			var req_string = data;
 		} else {
 			var org_data = data;
-			for (k in data) if (data.hasOwnProperty(k)) d_count++;
+			for (var k in data){
+			  if (data.hasOwnProperty(k)){ d_count++; }
+			}
 		}
 		if((d_type == "object" && d_count > 0) || d_type == "string"){
 			return this.each(function(x){
@@ -96,7 +98,9 @@
 				} else {
 					prefill_value = "";
 					var prefill_count = 0;
-					for (k in opts.preFill) if (opts.preFill.hasOwnProperty(k)) prefill_count++;
+					for (var k in opts.preFill){
+					  if (opts.preFill.hasOwnProperty(k)){ prefill_count++; }
+					}
 					if(prefill_count > 0){
 						for(var i=0; i < prefill_count; i++){
 							var new_v = opts.preFill[i][opts.selectedValuesProp];
@@ -222,7 +226,7 @@
 					// ignore if the following keys are pressed: [del] [shift] [capslock]
 					if( lastKeyPressCode == 46 || (lastKeyPressCode > 8 && lastKeyPressCode < 32) ){ return results_holder.hide(); }
 					var string = input.val().replace(/[\\]+|[\/]+/g,"");
-					if (string == prev) return;
+					if (string == prev){ return; }
 					prev = string;
 					if (string.length >= opts.minChars) {
 						selections_holder.addClass("loading");
@@ -237,7 +241,9 @@
 							$.getJSON(req_string+"?"+opts.queryParam+"="+encodeURIComponent(string)+limit+opts.extraParams, function(data){ 
 								d_count = 0;
 								var new_data = opts.retrieveComplete.call(this, data);
-								for (k in new_data) if (new_data.hasOwnProperty(k)) d_count++;
+								for (var k in new_data){
+								  if (new_data.hasOwnProperty(k)){ d_count++; }
+								}
 								processData(new_data, string);
 							});
 						} else {
