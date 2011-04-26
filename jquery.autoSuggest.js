@@ -20,7 +20,7 @@
  */
 
 (function($){
-	$.fn.autoSuggest = function(data, options) {
+  $.fn.autoSuggest = function(data, options) {
 		var defaults = { 
 			asHtmlID: false,
 			startText: "Enter Name Here",
@@ -40,17 +40,17 @@
 			neverSubmit: false,
 			selectionLimit: false,
 			showResultList: true,
-		  	start: function(){},
-		  	selectionClick: function(elem){},
-		  	selectionAdded: function(elem){},
-		  	selectionRemoved: function(elem){ elem.remove(); },
-		  	formatList: false, //callback function
-		  	beforeRetrieve: function(string){ return string; },
-		  	retrieveComplete: function(data){ return data; },
-		  	resultClick: function(data){},
-		  	resultsComplete: function(){}
-	  	};  
-	 	var opts = $.extend(defaults, options);	 	
+      start: function(){},
+      selectionClick: function(elem){},
+      selectionAdded: function(elem){},
+      selectionRemoved: function(elem){ elem.remove(); },
+      formatList: false, //callback function
+      beforeRetrieve: function(string){ return string; },
+      retrieveComplete: function(data){ return data; },
+      resultClick: function(data){},
+      resultsComplete: function(){}
+    };
+    var opts = $.extend(defaults, options);
 		
 		var d_type = "object";
 		var d_count = 0;
@@ -238,7 +238,7 @@
 								d_count = 0;
 								var new_data = opts.retrieveComplete.call(this, data);
 								for (k in new_data) if (new_data.hasOwnProperty(k)) d_count++;
-								processData(new_data, string); 
+								processData(new_data, string);
 							});
 						} else {
 							if(opts.beforeRetrieve){
@@ -365,4 +365,4 @@
 			});
 		}
 	}
-})(jQuery);  	
+})(jQuery);
