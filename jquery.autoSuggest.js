@@ -90,7 +90,7 @@
 					for(var i=0; i < vals.length; i++){
 						var v_data = {};
 						v_data[opts.selectedValuesProp] = vals[i];
-						if(vals[i] != ""){
+						if(vals[i] !== ""){
 							add_selected_item(v_data, "000"+i);	
 						}		
 					}
@@ -104,15 +104,15 @@
 					if(prefill_count > 0){
 						for(var i=0; i < prefill_count; i++){
 							var new_v = opts.preFill[i][opts.selectedValuesProp];
-							if(new_v == undefined){ new_v = ""; }
+							if(new_v === undefined){ new_v = ""; }
 							prefill_value = prefill_value+new_v+",";
-							if(new_v != ""){
+							if(new_v !== ""){
 								add_selected_item(opts.preFill[i], "000"+i);	
 							}		
 						}
 					}
 				}
-				if(prefill_value != ""){
+				if(prefill_value !== ""){
 					input.val("");
 					var lastChar = prefill_value.substring(prefill_value.length-1);
 					if(lastChar != ","){ prefill_value = prefill_value+","; }
@@ -132,11 +132,11 @@
 				
 				// Handle input field events
 				input.focus(function(){			
-					if($(this).val() == opts.startText && values_input.val() == ""){
+					if($(this).val() == opts.startText && values_input.val() === ""){
 						$(this).val("");
 					} else if(input_focus){
 						$("li.as-selection-item", selections_holder).removeClass("blur");
-						if($(this).val() != ""){
+						if($(this).val() !== ""){
 							results_ul.css("width",selections_holder.outerWidth());
 							results_holder.show();
 						}
@@ -144,7 +144,7 @@
 					input_focus = true;
 					return true;
 				}).blur(function(){
-					if($(this).val() == "" && values_input.val() == "" && prefill_value == ""){
+					if($(this).val() === "" && values_input.val() === "" && prefill_value === ""){
 						$(this).val(opts.startText);
 					} else if(input_focus){
 						$("li.as-selection-item", selections_holder).addClass("blur").removeClass("selected");
@@ -164,7 +164,7 @@
 							moveSelection("down");
 							break;
 						case 8:  // delete
-							if(input.val() == ""){							
+							if(input.val() === ""){
 								var last = values_input.val().split(",");
 								last = last[last.length - 2];
 								selections_holder.children().not(org_li.prev()).removeClass("selected");
@@ -188,7 +188,7 @@
 						case 9: case 188:  // tab or comma
 							tab_press = true;
 							var i_input = input.val().replace(/(,)/g, "");
-							if(i_input != "" && values_input.val().search(","+i_input+",") < 0 && i_input.length >= opts.minChars){	
+							if(i_input !== "" && values_input.val().search(","+i_input+",") < 0 && i_input.length >= opts.minChars){	
 								e.preventDefault();
 								var n_data = {};
 								n_data[opts.selectedItemProp] = i_input;
